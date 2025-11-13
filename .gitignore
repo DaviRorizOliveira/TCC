@@ -9,3 +9,4 @@ data/*.csv
 models/*.pkl
 .DS_Store
 .ipynb_checkpoints/
+tests/

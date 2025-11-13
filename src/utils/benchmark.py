@@ -2,11 +2,9 @@ import time
 import warnings
 from typing import Dict
 import numpy as np
-
 from ..methods.iterative_methods import IterativeMethods
 
 class QuickBenchmark:
-    # Sistema de benchmark para comparar métodos iterativos
     @staticmethod
     def run_all_methods(A: np.ndarray, b: np.ndarray, tol: float = 1e-6, max_iter: int = 1000) -> Dict[str, Dict]:
         results = {}
@@ -15,21 +13,26 @@ class QuickBenchmark:
             'gauss_seidel': IterativeMethods.gauss_seidel,
             'gradiente_conjugado': IterativeMethods.conjugate_gradient
         }
+
         for name, method in methods.items():
             try:
                 start_time = time.time()
                 with warnings.catch_warnings(record=True):
                     warnings.simplefilter("always")
-                    x, iterations, residuals = method(A, b, tol=tol, max_iter=max_iter)
+                    x, iterations, residuals = method(A, b, tol = tol, max_iter = max_iter)
                 elapsed_time = time.time() - start_time
-                final_residual = residuals[-1] if residuals else np.inf
+
+                # Garantir que residuals existe
+                residual_history = residuals if isinstance(residuals, list) else []
+                final_residual = residual_history[-1] if residual_history else np.inf
                 converged = final_residual < tol
+
                 results[name] = {
                     'success': converged,
                     'iterations': iterations,
                     'time': elapsed_time,
                     'residual': final_residual,
-                    'residual_history': residuals
+                    'residual_history': residual_history
                 }
             except Exception as e:
                 results[name] = {
@@ -40,7 +43,7 @@ class QuickBenchmark:
                     'error': str(e)
                 }
         return results
-    
+
     @staticmethod
     def print_comparison(results: Dict[str, Dict], matrix_info: str = ""):
         print("=" * 90)
