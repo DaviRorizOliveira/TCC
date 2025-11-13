@@ -79,7 +79,7 @@ def teste():
     benchmark = QuickBenchmark()
     
     # m = int(np.sqrt(tamanho).round())
-    A, b = generator.generate_symmetric_positive_definite(tamanho, condition_number = 500)
+    A, b = generator.generate_sparse_matrix(tamanho, sparsity = 0.99, ensure_convergence = True)
     
     # 1. Predição
     print('\n=======================================')
