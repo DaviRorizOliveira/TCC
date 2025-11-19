@@ -42,12 +42,42 @@ def generate_sample(matrix_type, n, params):
 def generate_dataset(num_samples_per_type = 100, n_range = (100, 1000), max_workers = 4, output_file = 'data/processed/train/dataset.csv'):
     matrix_types = [
         ('generate_random_matrix', {}),
-        ('generate_diagonal_dominant', {'dominance_factor': 3.0}),
+        
+        ('generate_diagonal_dominant', {'dominance_factor': 0.1}),
+        ('generate_diagonal_dominant', {'dominance_factor': 0.5}),
+        ('generate_diagonal_dominant', {'dominance_factor': 1.0}),
         ('generate_diagonal_dominant', {'dominance_factor': 1.2}),
+        ('generate_diagonal_dominant', {'dominance_factor': 1.5}),
+        ('generate_diagonal_dominant', {'dominance_factor': 2.0}),
+        ('generate_diagonal_dominant', {'dominance_factor': 5.0}),
+        ('generate_diagonal_dominant', {'dominance_factor': 10.0}),
+        ('generate_diagonal_dominant', {'dominance_factor': 20.0}),
+        
+        ('generate_symmetric_positive_definite', {'condition_number': 1}),
+        ('generate_symmetric_positive_definite', {'condition_number': 2}),
+        ('generate_symmetric_positive_definite', {'condition_number': 5}),
+        ('generate_symmetric_positive_definite', {'condition_number': 10}),
+        ('generate_symmetric_positive_definite', {'condition_number': 25}),
         ('generate_symmetric_positive_definite', {'condition_number': 50}),
+        ('generate_symmetric_positive_definite', {'condition_number': 75}),
+        ('generate_symmetric_positive_definite', {'condition_number': 100}),
+        ('generate_symmetric_positive_definite', {'condition_number': 250}),
+        ('generate_symmetric_positive_definite', {'condition_number': 500}),
+        ('generate_symmetric_positive_definite', {'condition_number': 750}),
         ('generate_symmetric_positive_definite', {'condition_number': 1000}),
+        ('generate_symmetric_positive_definite', {'condition_number': 2000}),
+        
+        ('generate_sparse_matrix', {'sparsity': 0.1, 'ensure_convergence': True}),
+        ('generate_sparse_matrix', {'sparsity': 0.25, 'ensure_convergence': True}),
+        ('generate_sparse_matrix', {'sparsity': 0.5, 'ensure_convergence': True}),
+        ('generate_sparse_matrix', {'sparsity': 0.75, 'ensure_convergence': True}),
         ('generate_sparse_matrix', {'sparsity': 0.9, 'ensure_convergence': True}),
+        ('generate_sparse_matrix', {'sparsity': 0.95, 'ensure_convergence': True}),
+        ('generate_sparse_matrix', {'sparsity': 0.99, 'ensure_convergence': True}),
+        
         ('generate_tridiagonal', {'symmetric': True}),
+        ('generate_tridiagonal', {'symmetric': False}),
+        
         ('generate_laplacian_2d', {'grid_size': 'dynamic'}),
     ]
 
@@ -69,6 +99,6 @@ def generate_dataset(num_samples_per_type = 100, n_range = (100, 1000), max_work
 
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     df = pd.DataFrame(samples)
-    df.to_csv(output_file, index=False)
+    df.to_csv(output_file, index = False)
     print(f"Dataset gerado: {output_file} ({len(df)} amostras)")
     return df

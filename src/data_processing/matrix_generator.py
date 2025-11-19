@@ -2,7 +2,6 @@ import numpy as np
 from scipy.linalg import toeplitz
 from typing import Tuple
 
-
 class MatrixGenerator:
     @staticmethod
     def generate_random_matrix(n: int) -> Tuple[np.ndarray, np.ndarray]:
