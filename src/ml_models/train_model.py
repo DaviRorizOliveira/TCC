@@ -51,7 +51,7 @@ def train_model(input_file: str = 'data/processed/train/dataset.csv', model_file
     print(f"Acurácia CV: {cv_scores.mean():.3f} ± {cv_scores.std():.3f}")
 
     # Matriz de confusão
-    cm_path = 'data/reports/confusion_matrix_v1.png'
+    cm_path = 'data/reports/confusion_matrix.png'
     os.makedirs(os.path.dirname(cm_path), exist_ok=True)
     plt.figure(figsize = (8, 6))
     sns.heatmap(confusion_matrix(y_test, y_pred, labels = model.classes_), annot = True, fmt = 'd', cmap = 'Blues', xticklabels = model.classes_, yticklabels = model.classes_)
@@ -65,7 +65,7 @@ def train_model(input_file: str = 'data/processed/train/dataset.csv', model_file
     importances = model.feature_importances_
     top_k = min(10, len(importances))
     indices = np.argsort(importances)[::-1][:top_k]
-    feat_path = 'data/reports/feature_importance_v1.png'
+    feat_path = 'data/reports/feature_importance.png'
     plt.figure(figsize = (10, 6))
     plt.title(f"Top {top_k} Features")
     plt.bar(range(top_k), importances[indices], color = 'skyblue', edgecolor = 'black')

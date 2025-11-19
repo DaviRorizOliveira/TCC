@@ -13,33 +13,41 @@ class QuickBenchmark:
             'gauss_seidel': IterativeMethods.gauss_seidel,
             'gradiente_conjugado': IterativeMethods.conjugate_gradient
         }
+        
+        try:
+            x_exact = np.linalg.solve(A, b)
+            print(f"[OK] Solução exata computada (n = {A.shape[0]})")
+        except np.linalg.LinAlgError:
+            x_exact = None
+            print("[AVISO] np.linalg.solve falhou")
 
         for name, method in methods.items():
             try:
                 start_time = time.time()
                 with warnings.catch_warnings(record=True):
                     warnings.simplefilter("always")
-                    x, iterations, residuals = method(A, b, tol = tol, max_iter = max_iter)
+                    x, iterations = method(A, b, x_exact = x_exact, tol = tol, max_iter = max_iter)
                 elapsed_time = time.time() - start_time
 
-                # Garantir que residuals existe
-                residual_history = residuals if isinstance(residuals, list) else []
-                final_residual = residual_history[-1] if residual_history else np.inf
-                converged = final_residual < tol
+                if x_exact is not None:
+                    rel_error = np.linalg.norm(x - x_exact) / (np.linalg.norm(x_exact) + 1e-15)
+                    success = rel_error < tol
+                else:
+                    rel_error = np.nan
+                    success = False
 
                 results[name] = {
-                    'success': converged,
+                    'success': success,
                     'iterations': iterations,
                     'time': elapsed_time,
-                    'residual': final_residual,
-                    'residual_history': residual_history
+                    'relative_error': rel_error,
                 }
             except Exception as e:
                 results[name] = {
                     'success': False,
                     'iterations': max_iter,
                     'time': 0.0,
-                    'residual': np.inf,
+                    'relative_error': np.nan,
                     'error': str(e)
                 }
         return results
@@ -50,12 +58,12 @@ class QuickBenchmark:
         if matrix_info:
             print(f"TIPO DE MATRIZ: {matrix_info}")
         print("=" * 90)
-        print(f"{'Método':<25} {'Convergiu?':<12} {'Iterações':<12} {'Tempo (s)':<15} {'Resíduo Final':<15}")
+        print(f"{'Método':<25} {'Convergiu?':<12} {'Iterações':<12} {'Tempo (s)':<15} {'Erro Relativo':<15}")
         print("-" * 90)
         for method_name, data in results.items():
             status = "Sim" if data['success'] else "Não"
             iterations = data['iterations'] if data['success'] else "---"
             time_str = f"{data['time']:.6f}"
-            residual = f"{data['residual']:.2e}"
+            residual = f"{data['relative_error']:.2e}" if data['relative_error'] is not None else "---"
             print(f"{method_name:<25} {status:<12} {str(iterations):<12} {time_str:<15} {residual:<15}")
         print("=" * 90)

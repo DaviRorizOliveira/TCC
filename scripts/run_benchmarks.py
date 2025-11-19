@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.data_processing.matrix_generator import MatrixGenerator
 from src.utils.benchmark import QuickBenchmark
 
-tamanho = 128
+tamanho = 4096
 
 def run_beta_tests():
     generator = MatrixGenerator()

@@ -32,7 +32,7 @@ def generate_sample(matrix_type, n, params):
             sample[f'{m}_success'] = r['success']
             sample[f'{m}_iterations'] = r['iterations']
             sample[f'{m}_time'] = r['time']
-            sample[f'{m}_residual'] = r['residual']
+            sample[f'{m}_relative_error'] = r['relative_error']
 
         return sample
     except Exception as e:

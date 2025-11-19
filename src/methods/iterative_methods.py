@@ -12,7 +12,7 @@ class IterativeMethods:
     # Converge para matrizes estritamente diagonal-dominantes
     # Mais lento que Gauss-Seidel, mas mais estável em alguns casos
     @staticmethod
-    def jacobi(A, b, x0 = None, tol = tolerancia, max_iter = stop):
+    def jacobi(A, b, x_exact = None, x0 = None, tol = tolerancia, max_iter = stop):
         n = b.size
         if x0 is None:
             x0 = np.zeros(n)
@@ -25,7 +25,6 @@ class IterativeMethods:
             raise ValueError("Diagonal possui zeros")
 
         inv_D = 1.0 / D # Calcula o inverso da diagonal
-        residual_history = []
 
         R = A - np.diag(D) # L + U
 
@@ -33,24 +32,22 @@ class IterativeMethods:
             # Calcula x^(k + 1) = D^(-1) * (b - (L + U)x^(k))
             x_new = inv_D * (b - R @ x)
             
-            # Cálculo direto do resíduo
-            residual = np.linalg.norm(b - A @ x_new)
-            residual_history.append(residual)
-            
-            # Critério de parada
-            if residual < tol:
-                return x_new, k + 1, residual_history
+            if x_exact is not None:
+                rel_err = np.linalg.norm(x_new - x_exact) / (np.linalg.norm(x_exact) + 1e-15)
+                if rel_err < tol:
+                    return x_new, k + 1
+
             x = x_new
         
         warnings.warn(f"Jacobi não convergiu em {max_iter} iterações")
-        return x, max_iter, residual_history
+        return x, max_iter
     
     # 2. Método de Gauss-Seidel
     # Geralmente converge mais rápido que Jacobi (2x mais rápido tipicamente)
     # Não pode ser paralelizado (depende de valores recém-calculados)
     # Converge sob as mesmas condições que Jacobi (exceto quando ultrapassa o valor máximo das iterações)
     @staticmethod
-    def gauss_seidel(A, b, x0 = None, tol = tolerancia, max_iter = stop):
+    def gauss_seidel(A, b, x_exact = None, x0 = None, tol = tolerancia, max_iter = stop):
         n = b.size
         if x0 is None:
             x0 = np.zeros(n)
@@ -60,8 +57,6 @@ class IterativeMethods:
         diag = np.diag(A)
         if np.any(diag == 0):
             raise ValueError("Diagonal possui zeros")
-
-        residual_history = []
 
         for k in range(max_iter):
             x_new = x.copy()
@@ -73,17 +68,15 @@ class IterativeMethods:
                 sum_ax = np.dot(A[i, :i], x_new[:i]) + np.dot(A[i, i+1:], x[i+1:])
                 x_new[i] = (b[i] - sum_ax) / A[i, i]
 
-            # Cálculo direto do resíduo
-            residual = np.linalg.norm(b - A @ x_new)
-            residual_history.append(residual)
-            
-            # Critério de parada
-            if residual < tol:
-                return x_new, k + 1, residual_history
+            if x_exact is not None:
+                rel_err = np.linalg.norm(x_new - x_exact) / (np.linalg.norm(x_exact) + 1e-15)
+                if rel_err < tol:
+                    return x_new, k + 1
+
             x = x_new
 
         warnings.warn(f"Gauss-Seidel não convergiu em {max_iter} iterações")
-        return x_new, max_iter, residual_history
+        return x_new, max_iter
     
     # 3. Método do Gradiente Conjugado
     # Muito mais rápido que Jacobi/Gauss-Seidel para matrizes SPD
@@ -91,7 +84,7 @@ class IterativeMethods:
     # Falha para matrizes não SPD (indefinidas, não simétricas)
     # Ideal para matrizes esparsas de grande dimensão
     @staticmethod
-    def conjugate_gradient(A, b, x0 = None, tol = tolerancia, max_iter = stop):
+    def conjugate_gradient(A, b, x_exact = None, x0 = None, tol = tolerancia, max_iter = stop):
         n = b.size
         if x0 is None:
             x0 = np.zeros(n)
@@ -100,7 +93,6 @@ class IterativeMethods:
         r = b - A @ x
         p = r.copy()
         rs_old = np.dot(r, r)
-        residual_history = [np.sqrt(rs_old)]
 
         for k in range(max_iter):
             Ap = A @ p
@@ -113,16 +105,16 @@ class IterativeMethods:
             r -= alpha * Ap
 
             rs_new = np.dot(r, r)
-            residual = np.sqrt(rs_new)
-            residual_history.append(residual)
 
-            # Critério de parada
-            if residual < tol:
-                return x, k + 1, residual_history
+            # CRITÉRIO DE PARADA: ERRO RELATIVO EXATO
+            if x_exact is not None:
+                rel_err = np.linalg.norm(x - x_exact) / (np.linalg.norm(x_exact) + 1e-15)
+                if rel_err < tol:
+                    return x, k + 1
 
             beta = rs_new / rs_old
             p[:] = r + beta * p # atualização in-place
             rs_old = rs_new
 
         warnings.warn(f"Gradiente Conjugado não convergiu em {max_iter} iterações")
-        return x, max_iter, residual_history
+        return x, max_iter
