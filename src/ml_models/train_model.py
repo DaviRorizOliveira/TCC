@@ -59,7 +59,7 @@ def train_model(input_file = 'data/processed/train/dataset.csv', model_file = 'd
 
     y_pred_labels = np.where(np.all(y_pred_weights <= 0.01, axis=1), 'nenhum', [method_names[np.argmax(row)] for row in y_pred_weights])
 
-    #  Top-1 Accuracy (Verificação se método previsto foi o melhor real)
+    # Top-1 Accuracy (Verificação se método previsto foi o melhor real)
     top1_acc = accuracy_score(y_true_test, y_pred_labels)
     print(f"\nTop-1 Accuracy: {top1_acc:.1%}")
 
@@ -92,11 +92,11 @@ def train_model(input_file = 'data/processed/train/dataset.csv', model_file = 'd
     
     # Gera o gráfico de importância das features
     importances = np.mean([est.feature_importances_ for est in model.estimators_], axis = 0)
-    idx = np.argsort(importances)[::-1][:10]
-    plt.figure(figsize = (10,6))
-    plt.bar(range(10), importances[idx])
-    plt.xticks(range(10), [feature_cols[i] for i in idx], rotation = 45, ha = 'right')
-    plt.title("Top 10 Features (Importância Média)")
+    idx = np.argsort(importances)[::-1][:11]
+    plt.figure(figsize = (11,6))
+    plt.bar(range(11), importances[idx])
+    plt.xticks(range(11), [feature_cols[i] for i in idx], rotation = 45, ha = 'right')
+    plt.title("Top Features (Importância Média)")
     plt.tight_layout()
     cm_path = 'data/reports/feature_importance.png'
     os.makedirs(os.path.dirname(cm_path), exist_ok = True)

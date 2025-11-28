@@ -1,4 +1,3 @@
-# scripts/run_predict.py
 import sys
 import os
 import pandas as pd
@@ -139,12 +138,8 @@ generator.generate_sparse_matrix(tamanho, sparsity = 0.95, ensure_convergence = 
 generator.generate_sparse_matrix(tamanho, sparsity = 0.99, ensure_convergence = True)
 generator.generate_tridiagonal(tamanho, symmetric = True)
 generator.generate_ill_conditioned(tamanho, condition_number = 1e5)
-generator.generate_non_symmetric_dominant(tamanho, dominance_factor = 3.0)
 generator.generate_indefinite(tamanho, condition_number = 100)
-generator.generate_clustered_eigenvalues(tamanho, num_clusters = 2, condition_number = 100)
 generator.generate_toeplitz(tamanho, alpha = 0.5)
-generator.generate_laplacian_2d(m)
-generator.generate_band_matrix(tamanho, bandwidth = 5)
 '''
 
 def teste():

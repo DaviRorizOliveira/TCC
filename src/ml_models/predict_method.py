@@ -1,4 +1,3 @@
-# src/ml_models/predict_method.py
 import joblib
 import pandas as pd
 import numpy as np

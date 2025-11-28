@@ -73,13 +73,13 @@ class MatrixGenerator:
         if symmetric:
             for i in range(n):
                 A[i, i] = 4.0
-                if i > 0: A[i, i-1] = -1.0
-                if i < n-1: A[i, i+1] = -1.0
+                if i > 0: A[i, i - 1] = -1.0
+                if i < n-1: A[i, i + 1] = -1.0
         else:
             for i in range(n):
                 A[i, i] = 4.0
-                if i > 0: A[i, i-1] = -1.0
-                if i < n-1: A[i, i+1] = -2.0
+                if i > 0: A[i, i - 1] = -1.0
+                if i < n-1: A[i, i + 1] = -2.0
         b = np.random.uniform(-10, 10, n)
         return A, b
 
@@ -95,7 +95,7 @@ class MatrixGenerator:
         return A, b
 
     @staticmethod
-    # Matriz indefinida
+    # Matriz indefinida simétrica
     def generate_indefinite(n: int, condition_number: float = 100.0) -> Tuple[np.ndarray, np.ndarray]:
         Q, _ = np.linalg.qr(np.random.randn(n, n))
         half = n // 2
