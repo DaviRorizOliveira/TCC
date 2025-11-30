@@ -116,3 +116,80 @@ class MatrixGenerator:
         A = A + np.eye(n) * 10
         b = np.random.uniform(-10, 10, n)
         return A, b
+    
+    @staticmethod
+    # Matriz onde o método de Jacobi diverge
+    def generate_jacobi_diverges(n: int):
+        A = np.diag(np.ones(n)) + np.diag(0.99 * np.ones(n - 1), 1)
+        A = A.T @ A + np.eye(n)
+        A = np.tril(np.ones((n, n)), -1) * 1.1
+        np.fill_diagonal(A, 1.0)
+        b = np.ones(n)
+        return A, b
+    
+    @staticmethod
+    # Matriz de Stieltjes
+    def generate_stieltjes(n: int):
+        A = np.random.uniform(0.1, 2.0, (n, n))
+        A = np.tril(A) + np.tril(A, -1).T
+        A = -np.abs(A) + np.diag(np.sum(np.abs(A), axis = 1) + np.random.uniform(1, 5, n))
+        b = np.random.rand(n)
+        return A, b
+    
+    @staticmethod
+    # Matriz singular ou quase singular
+    def generate_singular_or_near_singular(n: int, rank_deficiency: int = 2, near_singular: bool = True) -> Tuple[np.ndarray, np.ndarray]:
+        Q, _ = np.linalg.qr(np.random.randn(n, n))
+        R, _ = np.linalg.qr(np.random.randn(n, n))
+        
+        if near_singular:
+            singular_vals = np.logspace(0, -16, n)
+            A = Q @ np.diag(singular_vals) @ R.T
+            rank_deficiency = 0
+        else:
+            singular_vals = np.concatenate([
+                np.random.uniform(1, 10, n - rank_deficiency),
+                np.zeros(rank_deficiency)
+            ])
+            np.random.shuffle(singular_vals)
+            A = Q @ np.diag(singular_vals) @ R.T
+        
+        x_exact = np.random.randn(n)
+        b = A @ x_exact
+        
+        if near_singular:
+            b += np.random.randn(n) * 1e-12
+        
+        return A, b
+    
+    @staticmethod
+    # Matriz irredutivelmente diagonal dominante
+    def generate_irreducibly_diagonally_dominant(n: int, strict: bool = True, make_symmetric: bool = False) -> Tuple[np.ndarray, np.ndarray]:
+        if n < 2:
+            raise ValueError("n deve ser ≥ 2 para irreducibilidade")
+        
+        A = np.random.uniform(-0.9, 0.9, (n, n))
+        
+        for i in range(n):
+            A[i, (i + 1) % n] = np.random.uniform(-0.8, -0.1)
+            if i < n-1:
+                A[i, i + 1] = np.random.uniform(-0.7, 0.7)
+        
+        for i in range(n):
+            off_diag_sum = np.sum(np.abs(A[i, :])) - np.abs(A[i, i])
+            if strict:
+                A[i, i] = 1.01 * off_diag_sum + 0.1 + np.random.rand()
+            else:
+                factor = 1.01 if i < n-1 else 1.00
+                A[i, i] = factor * off_diag_sum + 0.1 + np.random.rand()
+        
+        if make_symmetric:
+            A = (A + A.T) / 2
+            for i in range(n):
+                off = np.sum(np.abs(A[i, :])) - abs(A[i, i])
+                A[i, i] = (1.01 if strict or i < n - 1 else 1.00) * off + 0.5
+        
+        A = np.array(A, dtype = float)
+        b = np.random.uniform(-10, 10, n)
+        
+        return A, b

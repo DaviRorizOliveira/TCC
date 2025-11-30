@@ -102,7 +102,31 @@ def run_beta_tests():
     print("\nTESTE 15: Matriz de Toeplitz")
     A, b = generator.generate_toeplitz(n, alpha = 0.5)
     results = benchmark.run_all_methods(A, b)
-    benchmark.print_comparison(results, f"Toeplitz Simétrica (a = 0.5, n = {n})")
+    benchmark.print_comparison(results, f"Toeplitz Simétrica (alpha = 0.5")
+
+    # TESTE 16: Matriz Stieltjes
+    print("\nTESTE 16: Matriz Stieltjes")
+    A, b = generator.generate_stieltjes(n)
+    results = benchmark.run_all_methods(A, b)
+    benchmark.print_comparison(results, f"Stieltjes")
+
+    # TESTE 17: Matriz Singular
+    print("\nTESTE 17: Matriz Singular")
+    A, b = generator.generate_singular_or_near_singular(n, near_singular = False)
+    results = benchmark.run_all_methods(A, b)
+    benchmark.print_comparison(results, f"Singular")
+    
+    # TESTE 18: Matriz Quase Singular
+    print("\nTESTE 18: Matriz Quase Singular")
+    A, b = generator.generate_singular_or_near_singular(n, rank_deficiency = 0.5)
+    results = benchmark.run_all_methods(A, b)
+    benchmark.print_comparison(results, f"Quase Singular")
+    
+    # TESTE 19: Matriz Irredutivelmente Diagonal Dominante
+    print("\nTESTE 19: Irredutivelmente Diagonal Dominante")
+    A, b = generator.generate_irreducibly_diagonally_dominant(n)
+    results = benchmark.run_all_methods(A, b)
+    benchmark.print_comparison(results, f"Irredutivelmente Diagonal Dominante")
 
 if __name__ == "__main__":
     run_beta_tests()
@@ -117,8 +141,8 @@ TIPO DE MATRIZ: Completamente Aleatória
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Não          ---          0.072604        nan            
-gauss_seidel              Não          ---          1.112370        nan            
+jacobi                    Não          ---          0.061845        nan            
+gauss_seidel              Não          ---          1.075276        nan            
 gradiente_conjugado       Não          ---          0.000000        nan            
 ==========================================================================================
 
@@ -129,8 +153,8 @@ TIPO DE MATRIZ: Diagonal Dominante (fator = 3.0)
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Sim          4            0.001795        8.86e-08       
-gauss_seidel              Sim          3            0.003201        9.90e-07       
+jacobi                    Sim          4            0.003581        8.51e-08       
+gauss_seidel              Sim          3            0.008235        9.75e-07       
 gradiente_conjugado       Não          ---          0.000000        nan            
 ==========================================================================================
 
@@ -141,8 +165,8 @@ TIPO DE MATRIZ: Diagonal Dominante Fraca (fator = 1.2)
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Sim          5            0.003917        1.45e-07       
-gauss_seidel              Sim          4            0.005636        3.00e-07       
+jacobi                    Sim          5            0.001483        1.63e-07       
+gauss_seidel              Sim          4            0.006753        3.07e-07       
 gradiente_conjugado       Não          ---          0.000000        nan            
 ==========================================================================================
 
@@ -153,9 +177,9 @@ TIPO DE MATRIZ: SPD Bem Condicionada (κ = 50)
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Sim          271          0.033220        9.59e-07       
-gauss_seidel              Sim          136          0.168858        9.83e-07       
-gradiente_conjugado       Sim          49           0.002613        7.55e-07       
+jacobi                    Sim          312          0.020061        9.86e-07       
+gauss_seidel              Sim          151          0.204248        9.99e-07       
+gradiente_conjugado       Sim          50           0.004232        8.91e-07       
 ==========================================================================================
 
 TESTE 5: Matriz SPD
@@ -165,9 +189,9 @@ TIPO DE MATRIZ: SPD Mal Condicionada (κ = 1000)
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Não          ---          0.063939        7.14e+04       
-gauss_seidel              Não          ---          1.085119        1.75e-02       
-gradiente_conjugado       Sim          106          0.006148        8.64e-07       
+jacobi                    Não          ---          0.070272        4.03e+00       
+gauss_seidel              Não          ---          1.121949        7.71e-03       
+gradiente_conjugado       Sim          113          0.006718        9.67e-07       
 ==========================================================================================
 
 TESTE 6: Matriz 25% Esparsa
@@ -177,9 +201,9 @@ TIPO DE MATRIZ: 25% Esparsa (Diagonal Dominante)
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Sim          5            0.004345        1.07e-07       
-gauss_seidel              Sim          4            0.009163        5.59e-08       
-gradiente_conjugado       Sim          5            0.000410        3.33e-07       
+jacobi                    Sim          5            0.001354        1.20e-07       
+gauss_seidel              Sim          4            0.007015        4.97e-08       
+gradiente_conjugado       Sim          5            0.000724        6.39e-07       
 ==========================================================================================
 
 TESTE 7: Matriz 50% Esparsa
@@ -189,9 +213,9 @@ TIPO DE MATRIZ: 50% Esparsa (Diagonal Dominante)
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Sim          5            0.001534        1.74e-07       
-gauss_seidel              Sim          4            0.010276        7.26e-08       
-gradiente_conjugado       Sim          6            0.000766        9.23e-08       
+jacobi                    Sim          5            0.001902        1.75e-07       
+gauss_seidel              Sim          4            0.006911        8.53e-08       
+gradiente_conjugado       Sim          6            0.000884        7.55e-08       
 ==========================================================================================
 
 TESTE 8: Matriz 70% Esparsa
@@ -201,9 +225,9 @@ TIPO DE MATRIZ: 70% Esparsa (Diagonal Dominante)
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Sim          5            0.004024        4.65e-07       
-gauss_seidel              Sim          4            0.007680        1.84e-07       
-gradiente_conjugado       Sim          6            0.000568        7.00e-07       
+jacobi                    Sim          5            0.001430        4.34e-07       
+gauss_seidel              Sim          4            0.008315        1.83e-07       
+gradiente_conjugado       Sim          6            0.001004        5.98e-07       
 ==========================================================================================
 
 TESTE 9: Matriz Esparsa (90% zeros)
@@ -213,9 +237,9 @@ TIPO DE MATRIZ: Esparsa 90% (Diagonal Dominante)
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Sim          6            0.001292        4.46e-07       
-gauss_seidel              Sim          5            0.008562        2.93e-08       
-gradiente_conjugado       Sim          9            0.000643        1.70e-07       
+jacobi                    Sim          6            0.001374        3.88e-07       
+gauss_seidel              Sim          5            0.007290        3.31e-08       
+gradiente_conjugado       Sim          8            0.000747        9.39e-07       
 ==========================================================================================
 
 TESTE 10: Matriz Esparsa (95% zeros)
@@ -225,9 +249,9 @@ TIPO DE MATRIZ: Esparsa 95% (Diagonal Dominante)
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Sim          7            0.003193        3.59e-07       
-gauss_seidel              Sim          5            0.007021        1.56e-07       
-gradiente_conjugado       Sim          10           0.000702        4.09e-07       
+jacobi                    Sim          7            0.001499        4.91e-07       
+gauss_seidel              Sim          5            0.009835        1.77e-07       
+gradiente_conjugado       Sim          10           0.000871        6.80e-07       
 ==========================================================================================
 
 TESTE 11: Matriz Esparsa (99% zeros)
@@ -237,9 +261,9 @@ TIPO DE MATRIZ: Esparsa 99% (Diagonal Dominante)
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Sim          11           0.001822        4.81e-07       
-gauss_seidel              Sim          7            0.009917        1.64e-07       
-gradiente_conjugado       Sim          30           0.004471        9.96e-07       
+jacobi                    Sim          11           0.001443        3.33e-07       
+gauss_seidel              Sim          7            0.008848        1.07e-07       
+gradiente_conjugado       Sim          30           0.003039        6.59e-07       
 ==========================================================================================
 
 TESTE 12: Matriz Tridiagonal Simétrica
@@ -249,9 +273,9 @@ TIPO DE MATRIZ: Tridiagonal Simétrica
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Sim          19           0.001837        8.62e-07       
-gauss_seidel              Sim          13           0.020026        3.51e-07       
-gradiente_conjugado       Sim          11           0.000944        7.02e-07       
+jacobi                    Sim          19           0.001883        7.89e-07       
+gauss_seidel              Sim          12           0.018335        9.86e-07       
+gradiente_conjugado       Sim          11           0.001041        7.40e-07       
 ==========================================================================================
 
 TESTE 13: Matriz Não Simétrica Diagonal Dominante
@@ -261,9 +285,9 @@ TIPO DE MATRIZ: Não Simétrica Dominante (fator = 3.0)
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Sim          4            0.001454        8.70e-08       
-gauss_seidel              Sim          4            0.005685        1.01e-08       
-gradiente_conjugado       Sim          5            0.000433        3.10e-07       
+jacobi                    Sim          4            0.001227        1.01e-07       
+gauss_seidel              Sim          4            0.006989        1.04e-08       
+gradiente_conjugado       Sim          5            0.001060        3.90e-07       
 ==========================================================================================
 
 TESTE 14: Matriz Simétrica Indefinida
@@ -273,20 +297,68 @@ TIPO DE MATRIZ: Indefinida (autovalores mistos, κ = 100)
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Não          ---          0.062599        nan            
-gauss_seidel              Não          ---          1.172096        nan            
+jacobi                    Não          ---          0.066510        nan            
+gauss_seidel              Não          ---          1.079237        nan            
 gradiente_conjugado       Não          ---          0.000000        nan            
 ==========================================================================================
 
 TESTE 15: Matriz de Toeplitz
 [OK] Solução exata computada (n = 512)
 ==========================================================================================
-TIPO DE MATRIZ: Toeplitz Simétrica (a = 0.5, n = 512)
+TIPO DE MATRIZ: Toeplitz Simétrica (alpha = 0.5
 ==========================================================================================
 Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
 ------------------------------------------------------------------------------------------
-jacobi                    Sim          10           0.001472        4.69e-07       
-gauss_seidel              Sim          6            0.011608        7.60e-07       
-gradiente_conjugado       Sim          6            0.003655        2.51e-07       
+jacobi                    Sim          10           0.001238        3.73e-07       
+gauss_seidel              Sim          6            0.006954        7.02e-07       
+gradiente_conjugado       Sim          6            0.000552        2.48e-07       
+==========================================================================================
+
+TESTE 16: Matriz Stieltjes
+[OK] Solução exata computada (n = 512)
+==========================================================================================
+TIPO DE MATRIZ: Stieltjes
+==========================================================================================
+Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
+------------------------------------------------------------------------------------------
+jacobi                    Não          ---          0.055496        3.85e-03       
+gauss_seidel              Não          ---          1.090214        1.50e-05       
+gradiente_conjugado       Sim          6            0.000430        4.60e-08       
+==========================================================================================
+
+TESTE 17: Matriz Singular
+[OK] Solução exata computada (n = 512)
+==========================================================================================
+TIPO DE MATRIZ: Singular
+==========================================================================================
+Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
+------------------------------------------------------------------------------------------
+jacobi                    Não          ---          0.073331        nan            
+gauss_seidel              Não          ---          1.290719        nan            
+gradiente_conjugado       Não          ---          0.000000        nan            
+==========================================================================================
+
+TESTE 18: Matriz Quase Singular
+[OK] Solução exata computada (n = 512)
+==========================================================================================
+TIPO DE MATRIZ: Quase Singular
+==========================================================================================
+Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
+------------------------------------------------------------------------------------------
+jacobi                    Não          ---          0.086250        nan            
+gauss_seidel              Não          ---          1.345469        nan            
+gradiente_conjugado       Não          ---          0.000000        nan            
+==========================================================================================
+
+TESTE 19: Irredutivelmente Diagonal Dominante
+[OK] Solução exata computada (n = 512)
+==========================================================================================
+TIPO DE MATRIZ: Irredutivelmente Diagonal Dominante
+==========================================================================================
+Método                    Convergiu?   Iterações    Tempo (s)       Erro Relativo  
+------------------------------------------------------------------------------------------
+jacobi                    Sim          5            0.001343        3.24e-07       
+gauss_seidel              Sim          4            0.004145        5.73e-07       
+gradiente_conjugado       Sim          7            0.000514        7.21e-07       
 ==========================================================================================
 '''

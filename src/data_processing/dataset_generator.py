@@ -191,6 +191,21 @@ def generate_dataset(num_samples_per_type, n_range, max_workers, output_file):
         ('generate_indefinite', {'condition_number': 750}),
         ('generate_indefinite', {'condition_number': 1000}),
         ('generate_indefinite', {'condition_number': 2000}),
+        
+        ('generate_singular_or_near_singular', {'rank_deficiency': 0, 'near_singular': True}),
+        ('generate_singular_or_near_singular', {'rank_deficiency': 1, 'near_singular': True}),
+        ('generate_singular_or_near_singular', {'rank_deficiency': 5, 'near_singular': True}),
+        
+        ('generate_singular_or_near_singular', {'rank_deficiency': 0, 'near_singular': False}),
+        ('generate_singular_or_near_singular', {'rank_deficiency': 1, 'near_singular': False}),
+        ('generate_singular_or_near_singular', {'rank_deficiency': 5, 'near_singular': False}),
+        
+        ('generate_jacobi_diverges', {}),
+        
+        ('generate_stieltjes', {}),
+        
+        ('generate_irreducibly_diagonally_dominant', {}),
+        ('generate_irreducibly_diagonally_dominant', {'make_symmetric': True}),
     ]
 
     samples = []

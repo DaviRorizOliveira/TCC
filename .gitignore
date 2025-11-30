@@ -11,5 +11,6 @@ models/*.pkl
 .ipynb_checkpoints/
 tests/
 *.pkl
-*.mat
-data/processed/train/amostras.csv
+*data/processed/SuiteSparse
+*data/processed/train/amostras.csv
+*scripts/evaluate_suitesparse.py

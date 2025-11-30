@@ -28,7 +28,7 @@ if __name__ == "__main__":
     '''
     Com o dataset final contendo 8500 amostras:
     
-    Tempo de execução: 8966.51 segundos
-    Tempo de execução: 149 minutos e 26 segundos
-    Tempo de execução: 2 horas, 29 minutos e 26 segundos
+    Tempo de execução: 10408.33 segundos
+    Tempo de execução: 173 minutos e 28.33 segundos
+    Tempo de execução: 2 horas, 53 minutos e 28.33 segundos
     '''
